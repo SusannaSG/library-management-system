@@ -1,0 +1,39 @@
+{% extends "library/base.html" %}
+{% block title %}Books{% endblock %}
+{% block content %}
+<h2 class="mb-3">Books</h2>
+
+<form method="get" class="row g-2 mb-3">
+  <div class="col-12 col-md-6">
+    <input type="search" name="q" value="{{ query }}" class="form-control"
+           placeholder="Search by title, author, category or ISBN" aria-label="Search books">
+  </div>
+  <div class="col-auto"><button class="btn btn-primary" type="submit">Search</button></div>
+  {% if query %}<div class="col-auto"><a class="btn btn-outline-secondary" href="{% url 'books' %}">Clear</a></div>{% endif %}
+</form>
+
+<div class="table-responsive">
+  <table class="table bg-white align-middle">
+    <thead><tr><th>Title</th><th>Author</th><th>Category</th><th>ISBN</th><th>Available</th></tr></thead>
+    <tbody>
+    {% for book in books %}
+      <tr>
+        <td>{{ book.title }}</td>
+        <td>{{ book.author }}</td>
+        <td>{{ book.category }}</td>
+        <td class="text-muted small">{{ book.isbn }}</td>
+        <td>
+          {% if book.available_copies > 0 %}
+            <span class="badge text-bg-success">{{ book.available_copies }} of {{ book.total_copies }}</span>
+          {% else %}
+            <span class="badge text-bg-secondary">All out</span>
+          {% endif %}
+        </td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="5" class="text-muted">No books found.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

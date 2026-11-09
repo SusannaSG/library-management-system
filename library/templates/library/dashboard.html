@@ -1,0 +1,37 @@
+{% extends "library/base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h2 class="mb-4">Dashboard</h2>
+
+<div class="row g-3 mb-4">
+  <div class="col-6 col-md-3"><div class="card text-center"><div class="card-body">
+    <div class="fs-2 fw-bold">{{ stats.total_books }}</div><div class="text-muted">Book titles</div></div></div></div>
+  <div class="col-6 col-md-3"><div class="card text-center"><div class="card-body">
+    <div class="fs-2 fw-bold">{{ stats.total_members }}</div><div class="text-muted">Members</div></div></div></div>
+  <div class="col-6 col-md-3"><div class="card text-center"><div class="card-body">
+    <div class="fs-2 fw-bold">{{ stats.active_loans }}</div><div class="text-muted">Books on loan</div></div></div></div>
+  <div class="col-6 col-md-3"><div class="card text-center border-danger"><div class="card-body">
+    <div class="fs-2 fw-bold text-danger">{{ stats.overdue_loans }}</div><div class="text-muted">Overdue</div></div></div></div>
+</div>
+
+<h4>Overdue books</h4>
+{% if overdue %}
+<div class="table-responsive">
+  <table class="table table-sm bg-white align-middle">
+    <thead><tr><th>Book</th><th>Member</th><th>Due</th><th>Fine so far</th></tr></thead>
+    <tbody>
+    {% for loan in overdue %}
+      <tr>
+        <td>{{ loan.book.title }}</td>
+        <td>{{ loan.member.name }}</td>
+        <td>{{ loan.due_on|date:"d M Y" }}</td>
+        <td>Rs. {{ loan.fine_so_far }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+  <p class="text-muted">Nothing is overdue.</p>
+{% endif %}
+{% endblock %}
